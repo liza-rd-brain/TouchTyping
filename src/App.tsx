@@ -34,9 +34,10 @@ export const App = () => {
     <Container>
       <TextInput
         defaultValue={getString(state)}
-        onInput={(event) => {
-          //That's how it works,meh.
-          const enteredLetter: string = (event as any).nativeEvent.data;
+        onKeyDown={(event) => {
+          event.preventDefault();
+          const enteredLetter: string = event.key;
+          console.log(enteredLetter);
           changeText(newState, setState, enteredLetter);
         }}
       ></TextInput>
