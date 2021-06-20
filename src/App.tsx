@@ -195,11 +195,14 @@ const changeText = (
       const newLeftedString = leftedString.substr(1);
       const newFilledString = filledString + enteredLetter;
 
-      const newState = {
-        index: newIndex,
-        filledString: newFilledString,
-        leftedString: newLeftedString,
-        currentLetter: newCurrentLetter,
+      const newState: State = {
+        ...state,
+        stringItem: {
+          index: newIndex,
+          filledString: newFilledString,
+          leftedString: newLeftedString,
+          currentLetter: newCurrentLetter,
+        },
       };
       setState(newState);
       break;
