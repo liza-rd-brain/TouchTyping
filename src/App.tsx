@@ -1,7 +1,6 @@
-import { useState, BaseSyntheticEvent, SyntheticEvent } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import styled from "styled-components";
-import { check } from "yargs";
 
 const Container = styled.div`
   display: flex;
@@ -27,17 +26,10 @@ const text: string =
 const russiaString =
   "Таким образом консультация с широким активом требуют определения и уточнения систем массового участия. Задача организации, в особенности же новая модель организационной деятельности позволяет оценить значение существенных финансовых и административных условий. Товарищи! консультация с широким активом способствует подготовки и реализации систем массового участия. Таким образом консультация с широким активом позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач.";
 const leftedString = russiaString.substr(1);
-console.log(leftedString);
+
 const currentLetter = russiaString.charAt(0);
 
-let state: State = {
-  index: 0,
-  filledString: "",
-  leftedString: leftedString,
-  currentLetter: currentLetter,
-};
-
-const TextArea = styled.textarea`
+/* const TextArea = styled.textarea`
   position: absolute;
   width: 800px;
   height: 300px;
@@ -49,7 +41,7 @@ const TextArea = styled.textarea`
   cursor: default;
   outline: none;
 `;
-
+ */
 const TextBlock = styled.div`
   border: 1px solid #000;
   width: 800px;
@@ -112,46 +104,33 @@ const TextSpan = styled.span<SpanType>`
     }
   }};
   border-radius: 3px;
-
-  /*   &:after {
-    content: "";
-    z-index: 5;
-    position: absolute;
-
-    background-color: ${(props) => {
-    switch (props.status) {
-      case "currentLetter": {
-        return "#3855c5";
-      }
-      default: {
-        return "none";
-      }
-    }
-  }};
-  } */
 `;
 
-const HighlightBlock = styled.span`
-  width: 10px;
-  height: 10px;
-  background-color: #3855c5;
-`;
+let state: State = {
+  index: 0,
+  filledString: "",
+  leftedString: leftedString,
+  currentLetter: currentLetter,
+};
 
-const initilstate = state;
 export const App = () => {
-  const [newState, setState] = useState(initilstate);
+  const [newState, setState] = useState(state);
+
+  const keyClicked = (event: KeyboardEvent) => {
+    const enteredLetter: string = event.key;
+    console.log(enteredLetter);
+    changeText(newState, setState, enteredLetter);
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyClicked);
+    return () => {
+      document.removeEventListener("keydown", keyClicked);
+    };
+  }, [newState.leftedString]);
+
   return (
     <Container id="container">
-      <TextArea
-        id="textArea"
-        autoFocus
-        onKeyDown={(event) => {
-          event.preventDefault();
-          const enteredLetter: string = event.key;
-          console.log(enteredLetter);
-          changeText(newState, setState, enteredLetter);
-        }}
-      ></TextArea>
       <TextBlock>
         <TextSpan status={"filledString"}>{newState.filledString}</TextSpan>
         <TextSpan status={"currentLetter"}>{newState.currentLetter}</TextSpan>
@@ -164,11 +143,6 @@ export const App = () => {
 };
 
 {
-  /* const getString = (state: State) => {
-  const { filledString, leftedString } = state;
-  const fullString = filledString + leftedString;
-  return fullString;
-}; */
 }
 
 /**
@@ -189,7 +163,6 @@ const changeText = (
 
   switch (isCorrectLetter) {
     case true: {
-      console.log("дать следующую букву");
       const newIndex = index + 1;
       const newCurrentLetter = leftedString.charAt(0);
       const newLeftedString = leftedString.substr(1);
@@ -205,7 +178,6 @@ const changeText = (
       break;
     }
     case false: {
-      console.log("Неверно");
       break;
     }
     default: {
@@ -217,8 +189,4 @@ const changeText = (
 const checkLetter = (currentLetter: string, enteredLetter: string) => {
   const expectedLetter = currentLetter;
   return expectedLetter === enteredLetter;
-};
-
-document.onclick = (e) => {
-  document.getElementById("textArea")?.focus();
 };
