@@ -9,26 +9,6 @@ const Container = styled.div`
   margin: 80px 0;
 `;
 
-type State = {
-  index: number;
-  filledString: string;
-  leftedString: string;
-  currentLetter: string;
-};
-
-/* const TextArea = styled.textarea`
-  position: absolute;
-  width: 800px;
-  height: 300px;
-  caret-color: transparent;
-  border: none;
-  resize: none;
-  color: transparent;
-  background-color: transparent;
-  cursor: default;
-  outline: none;
-`;
- */
 const TextBlock = styled.div`
   border: 1px solid #000;
   width: 800px;
@@ -103,15 +83,28 @@ const text: string =
 const russiaString =
   "Таким образом консультация с широким активом требуют определения и уточнения систем массового участия. Задача организации, в особенности же новая модель организационной деятельности позволяет оценить значение существенных финансовых и административных условий. Товарищи! консультация с широким активом способствует подготовки и реализации систем массового участия. Таким образом консультация с широким активом позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач.";
 
-const defaultState = {
-  index: 0,
-  filledString: "",
-  leftedString: "string",
-  currentLetter: "string",
+type State = {
+  stringLoaded: boolean;
+  stringItem: {
+    index: number;
+    filledString: string;
+    leftedString: string;
+    currentLetter: string;
+  };
+};
+
+const initialtState: State = {
+  stringLoaded: false,
+  stringItem: {
+    index: 0,
+    filledString: "",
+    leftedString: "",
+    currentLetter: "",
+  },
 };
 
 export const App = () => {
-  const [newState, setState] = useState(defaultState);
+  const [newState, setState] = useState(initialtState);
 
   const keyClicked = (event: KeyboardEvent) => {
     const enteredLetter: string = event.key;
@@ -120,11 +113,13 @@ export const App = () => {
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", keyClicked);
-    return () => {
-      document.removeEventListener("keydown", keyClicked);
-    };
-  }, [newState.leftedString]);
+    if (newState.stringLoaded === true) {
+      document.addEventListener("keydown", keyClicked);
+      return () => {
+        document.removeEventListener("keydown", keyClicked);
+      };
+    }
+  }, [newState.stringItem, newState.stringLoaded]);
 
   useEffect(() => {
     fetch("https://baconipsum.com/api/?callback=?type=meat-and-filler")
@@ -141,21 +136,31 @@ export const App = () => {
       );
   }, []);
 
-  return (
-    <Container id="container">
-      <TextBlock>
-        <TextSpan status={"filledString"}>{newState.filledString}</TextSpan>
-        <TextSpan status={"currentLetter"}>{newState.currentLetter}</TextSpan>
-        <TextSpan status={"leftedString"} id="leftedString">
-          {newState.leftedString}
-        </TextSpan>
-      </TextBlock>
-    </Container>
-  );
-};
+  const getTextBlock = () => {
+    switch (newState.stringLoaded) {
+      case false: {
+        return null;
+      }
+      case true: {
+        return (
+          <TextBlock>
+            <TextSpan status={"filledString"}>
+              {newState.stringItem.filledString}
+            </TextSpan>
+            <TextSpan status={"currentLetter"}>
+              {newState.stringItem.currentLetter}
+            </TextSpan>
+            <TextSpan status={"leftedString"} id="leftedString">
+              {newState.stringItem.leftedString}
+            </TextSpan>
+          </TextBlock>
+        );
+      }
+    }
+  };
 
-{
-}
+  return <Container id="container">{getTextBlock()}</Container>;
+};
 
 /**
  * 1. We need check out is input right letter?
@@ -169,10 +174,13 @@ const createInitialState = (initialString: string, setState: Function) => {
   const leftedString = initialString.substr(1);
   const currentLetter = initialString.charAt(0);
   const initialState = {
-    index: 0,
-    filledString: "",
-    leftedString: leftedString,
-    currentLetter: currentLetter,
+    stringLoaded: true,
+    stringItem: {
+      index: 0,
+      filledString: "",
+      leftedString: leftedString,
+      currentLetter: currentLetter,
+    },
   };
   setState(initialState);
 };
@@ -182,7 +190,7 @@ const changeText = (
   setState: Function,
   enteredLetter: string
 ) => {
-  const { index, filledString, leftedString, currentLetter } = state;
+  const { index, filledString, leftedString, currentLetter } = state.stringItem;
   const isCorrectLetter = checkLetter(currentLetter, enteredLetter);
 
   switch (isCorrectLetter) {
