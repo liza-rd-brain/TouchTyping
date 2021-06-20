@@ -16,19 +16,6 @@ type State = {
   currentLetter: string;
 };
 
-type SpanType = {
-  status: "filledString" | "leftedString" | "currentLetter";
-};
-
-const text: string =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis deserunt quae aliquid iusto ducimus? Consequuntur autem sequi suscipit assumenda. Ea, dolorum eum enim distinctio asperiores soluta explicabo dolore, tenetur deserunt obcaecati iste minus quo cumque recusandae fugiat! Fuga quos nisi explicabo soluta odit. Nemo repellat fugit veritatis reiciendis ipsam voluptates, laboriosam asperiores vero ea aperiam quod expedita in quidem dicta. Obcaecati dolor fuga molestias quisquam eligendi consequatur culpa iure. Itaque accusamus, facere quidem totam vitae corrupti at inventore quasi est, doloremque expedita architecto ea. Delectus libero quam, ipsum suscipit eos eius cupiditate laborum tenetur eum inventore corrupti commodi soluta impedit";
-
-const russiaString =
-  "Таким образом консультация с широким активом требуют определения и уточнения систем массового участия. Задача организации, в особенности же новая модель организационной деятельности позволяет оценить значение существенных финансовых и административных условий. Товарищи! консультация с широким активом способствует подготовки и реализации систем массового участия. Таким образом консультация с широким активом позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач.";
-const leftedString = russiaString.substr(1);
-
-const currentLetter = russiaString.charAt(0);
-
 /* const TextArea = styled.textarea`
   position: absolute;
   width: 800px;
@@ -106,15 +93,25 @@ const TextSpan = styled.span<SpanType>`
   border-radius: 3px;
 `;
 
-let state: State = {
+type SpanType = {
+  status: "filledString" | "leftedString" | "currentLetter";
+};
+
+const text: string =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis deserunt quae aliquid iusto ducimus? Consequuntur autem sequi suscipit assumenda. Ea, dolorum eum enim distinctio asperiores soluta explicabo dolore, tenetur deserunt obcaecati iste minus quo cumque recusandae fugiat! Fuga quos nisi explicabo soluta odit. Nemo repellat fugit veritatis reiciendis ipsam voluptates, laboriosam asperiores vero ea aperiam quod expedita in quidem dicta. Obcaecati dolor fuga molestias quisquam eligendi consequatur culpa iure. Itaque accusamus, facere quidem totam vitae corrupti at inventore quasi est, doloremque expedita architecto ea. Delectus libero quam, ipsum suscipit eos eius cupiditate laborum tenetur eum inventore corrupti commodi soluta impedit";
+
+const russiaString =
+  "Таким образом консультация с широким активом требуют определения и уточнения систем массового участия. Задача организации, в особенности же новая модель организационной деятельности позволяет оценить значение существенных финансовых и административных условий. Товарищи! консультация с широким активом способствует подготовки и реализации систем массового участия. Таким образом консультация с широким активом позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач.";
+
+const defaultState = {
   index: 0,
   filledString: "",
-  leftedString: leftedString,
-  currentLetter: currentLetter,
+  leftedString: "string",
+  currentLetter: "string",
 };
 
 export const App = () => {
-  const [newState, setState] = useState(state);
+  const [newState, setState] = useState(defaultState);
 
   const keyClicked = (event: KeyboardEvent) => {
     const enteredLetter: string = event.key;
@@ -128,6 +125,21 @@ export const App = () => {
       document.removeEventListener("keydown", keyClicked);
     };
   }, [newState.leftedString]);
+
+  useEffect(() => {
+    fetch("https://baconipsum.com/api/?callback=?type=meat-and-filler")
+      .then((res) => res.text())
+      .then(
+        (result) => {
+          console.log(result);
+          createInitialState(result, setState);
+        },
+
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
 
   return (
     <Container id="container">
@@ -152,6 +164,18 @@ export const App = () => {
  *    and removing from leftedString simultaniously.
  *
  */
+
+const createInitialState = (initialString: string, setState: Function) => {
+  const leftedString = initialString.substr(1);
+  const currentLetter = initialString.charAt(0);
+  const initialState = {
+    index: 0,
+    filledString: "",
+    leftedString: leftedString,
+    currentLetter: currentLetter,
+  };
+  setState(initialState);
+};
 
 const changeText = (
   state: State,
