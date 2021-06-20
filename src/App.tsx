@@ -77,12 +77,6 @@ type SpanType = {
   status: "filledString" | "leftedString" | "currentLetter";
 };
 
-const text: string =
-  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Debitis deserunt quae aliquid iusto ducimus? Consequuntur autem sequi suscipit assumenda. Ea, dolorum eum enim distinctio asperiores soluta explicabo dolore, tenetur deserunt obcaecati iste minus quo cumque recusandae fugiat! Fuga quos nisi explicabo soluta odit. Nemo repellat fugit veritatis reiciendis ipsam voluptates, laboriosam asperiores vero ea aperiam quod expedita in quidem dicta. Obcaecati dolor fuga molestias quisquam eligendi consequatur culpa iure. Itaque accusamus, facere quidem totam vitae corrupti at inventore quasi est, doloremque expedita architecto ea. Delectus libero quam, ipsum suscipit eos eius cupiditate laborum tenetur eum inventore corrupti commodi soluta impedit";
-
-const russiaString =
-  "Таким образом консультация с широким активом требуют определения и уточнения систем массового участия. Задача организации, в особенности же новая модель организационной деятельности позволяет оценить значение существенных финансовых и административных условий. Товарищи! консультация с широким активом способствует подготовки и реализации систем массового участия. Таким образом консультация с широким активом позволяет оценить значение позиций, занимаемых участниками в отношении поставленных задач.";
-
 type State = {
   stringLoaded: boolean;
   stringItem: {
@@ -122,11 +116,12 @@ export const App = () => {
   }, [newState.stringItem, newState.stringLoaded]);
 
   useEffect(() => {
-    fetch("https://baconipsum.com/api/?callback=?type=meat-and-filler")
+    fetch(
+      `https://baconipsum.com/api/?callback=?type=all-meat&paras=1&format=text&t=${new Date()}`
+    )
       .then((res) => res.text())
       .then(
         (result) => {
-          console.log(result);
           createInitialState(result, setState);
         },
 
