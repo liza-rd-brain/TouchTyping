@@ -21,37 +21,27 @@ const TextBlock = styled.div`
   letter-spacing: 0.8px;
 `;
 
-const TextSpan = styled.span<SpanType>`
-  color: ${(props) => {
-    switch (props.status) {
-      case "leftedString": {
-        return "#808080";
-      }
-      case "filledString": {
-        return "#3855c5";
-      }
-      case "currentLetter": {
-        return "white";
-      }
-      default: {
-        return "none";
-      }
-    }
-  }};
+type Carettype = {
+  isMistaken?: boolean;
+};
 
-  padding: ${(props) => {
-    switch (props.status) {
-      case "currentLetter": {
-        return "1px";
-      }
-      default: {
-        return "none";
-      }
-    }
-  }};
+const FilledSpan = styled.span`
+  color: #3855c5;
+`;
+
+const LeftedSpan = styled.span`
+  color: #808080;
+`;
+
+const CaretSpan = styled.span<Carettype>`
+  color: #ffffff;
+  padding: 1px;
   background-color: ${(props) => {
-    switch (props.status) {
-      case "currentLetter": {
+    switch (props.isMistaken) {
+      case true: {
+        return "red";
+      }
+      case false: {
         return "#3855c5";
       }
       default: {
@@ -59,32 +49,38 @@ const TextSpan = styled.span<SpanType>`
       }
     }
   }};
-
   border: ${(props) => {
-    switch (props.status) {
-      case "currentLetter": {
-        return "1px solid #3855c5";
+    switch (props.isMistaken) {
+      case true: {
+        return "1px solid red;";
+      }
+      case false: {
+        return "1px solid #3855c5;";
       }
       default: {
         return "none";
       }
     }
   }};
+
   border-radius: 3px;
 `;
 
-type SpanType = {
-  status: "filledString" | "leftedString" | "currentLetter";
+type CurrentLetterType = {
+  value: string;
+  isMistake: boolean;
+};
+
+type StringItemType = {
+  index: number;
+  filledString: string;
+  leftedString: string;
+  currentLetter: CurrentLetterType;
 };
 
 type State = {
   stringLoaded: boolean;
-  stringItem: {
-    index: number;
-    filledString: string;
-    leftedString: string;
-    currentLetter: string;
-  };
+  stringItem: StringItemType;
 };
 
 const initialtState: State = {
@@ -93,7 +89,10 @@ const initialtState: State = {
     index: 0,
     filledString: "",
     leftedString: "",
-    currentLetter: "",
+    currentLetter: {
+      value: "",
+      isMistake: false,
+    },
   },
 };
 
@@ -102,13 +101,13 @@ export const App = () => {
 
   const keyClicked = (event: KeyboardEvent) => {
     const enteredLetter: string = event.key;
-    console.log(enteredLetter);
     changeText(newState, setState, enteredLetter);
   };
 
   useEffect(() => {
     if (newState.stringLoaded === true) {
       document.addEventListener("keydown", keyClicked);
+
       return () => {
         document.removeEventListener("keydown", keyClicked);
       };
@@ -131,6 +130,8 @@ export const App = () => {
       );
   }, []);
 
+  useEffect(() => {}, [newState.stringItem.currentLetter.isMistake]);
+
   const getTextBlock = () => {
     switch (newState.stringLoaded) {
       case false: {
@@ -139,15 +140,13 @@ export const App = () => {
       case true: {
         return (
           <TextBlock>
-            <TextSpan status={"filledString"}>
-              {newState.stringItem.filledString}
-            </TextSpan>
-            <TextSpan status={"currentLetter"}>
-              {newState.stringItem.currentLetter}
-            </TextSpan>
-            <TextSpan status={"leftedString"} id="leftedString">
+            <FilledSpan>{newState.stringItem.filledString}</FilledSpan>
+            <CaretSpan isMistaken={newState.stringItem.currentLetter.isMistake}>
+              {newState.stringItem.currentLetter.value}
+            </CaretSpan>
+            <LeftedSpan id="leftedString">
               {newState.stringItem.leftedString}
-            </TextSpan>
+            </LeftedSpan>
           </TextBlock>
         );
       }
@@ -174,7 +173,7 @@ const createInitialState = (initialString: string, setState: Function) => {
       index: 0,
       filledString: "",
       leftedString: leftedString,
-      currentLetter: currentLetter,
+      currentLetter: { isMistake: false, value: currentLetter },
     },
   };
   setState(initialState);
@@ -201,13 +200,24 @@ const changeText = (
           index: newIndex,
           filledString: newFilledString,
           leftedString: newLeftedString,
-          currentLetter: newCurrentLetter,
+          currentLetter: { isMistake: false, value: newCurrentLetter },
         },
       };
       setState(newState);
       break;
     }
     case false: {
+      const newState: State = {
+        ...state,
+        stringItem: {
+          ...state.stringItem,
+          currentLetter: {
+            ...state.stringItem.currentLetter,
+            isMistake: true,
+          },
+        },
+      };
+      setState(newState);
       break;
     }
     default: {
@@ -216,7 +226,10 @@ const changeText = (
   }
 };
 
-const checkLetter = (currentLetter: string, enteredLetter: string) => {
-  const expectedLetter = currentLetter;
+const checkLetter = (
+  currentLetter: CurrentLetterType,
+  enteredLetter: string
+) => {
+  const expectedLetter = currentLetter.value;
   return expectedLetter === enteredLetter;
 };
