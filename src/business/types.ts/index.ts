@@ -13,4 +13,9 @@ export type StringItemType = {
 export type State = {
   stringLoaded: boolean;
   stringItem: StringItemType;
+  amountEnteredLetter: number;
 };
+
+export type ActionType =
+  | { type: "dataLoaded"; payload: string }
+  | { type: "keyClicked"; payload: string };

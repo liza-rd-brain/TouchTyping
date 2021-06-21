@@ -1,10 +1,14 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useReducer } from "react";
 
 import styled from "styled-components";
-import { CurrentLetterType, StringItemType, State } from "./types.ts";
+import { CurrentLetterType, StringItemType, State } from "./business/types.ts";
 
 import { createInitialState, changeText } from "./business/common";
-import { useMakeRequest, useAddKeyListener } from "./business/effects/";
+
+import { initialState, reducer } from "./business/reducer";
+
+import { AppContext } from "./App.provider";
+import { Comp1 } from "./components/Test";
 
 const Container = styled.div`
   display: flex;
@@ -13,11 +17,16 @@ const Container = styled.div`
   margin: 80px 0;
 `;
 
+const TrainingField = styled.div`
+  display: flex;
+  margin: 0 auto;
+`;
+
 const TextBlock = styled.div`
   border: 1px solid #000;
   width: 800px;
   height: 300px;
-  margin: 0 auto;
+
   padding: 20px;
   font-family: sans-serif;
   font-size: 18px;
@@ -33,6 +42,20 @@ const LeftedSpan = styled.span`
   color: #808080;
 `;
 
+const StausList = styled.div`
+  display: grid;
+  width: 100px;
+  height: 300px;
+  border: 1px solid black;
+  padding: 20px;
+`;
+
+const StatusItem = styled.div`
+  border: 1px solid gray;
+  display: grid;
+`;
+
+const StatusSpan = styled.div``;
 type Carettype = {
   isMistaken?: boolean;
 };
@@ -70,50 +93,77 @@ const CaretSpan = styled.span<Carettype>`
   border-radius: 3px;
 `;
 
-const initialtState: State = {
-  stringLoaded: false,
-  stringItem: {
-    index: 0,
-    filledString: "",
-    leftedString: "",
-    currentLetter: {
-      value: "",
-      isMistake: false,
-    },
-  },
-};
-
 export const App = () => {
-  const [newState, setState] = useState(initialtState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  const keyClicked = (event: KeyboardEvent) => {
-    const enteredLetter: string = event.key;
-    changeText(newState, setState, enteredLetter);
-  };
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) =>
+      dispatch({ type: "keyClicked", payload: event.key });
+    document.addEventListener("keydown", handler);
 
-  useMakeRequest(setState);
-  useAddKeyListener(newState, keyClicked);
+    return () => {
+      document.removeEventListener("keydown", handler);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetch(
+      `https://baconipsum.com/api/?callback=?type=all-meat&paras=1&format=text&t=${new Date()}`
+    )
+      .then((res) => res.text())
+      .then(
+        (result) => {
+          /*           createInitialState(result, setState); */
+          dispatch({ type: "dataLoaded", payload: result });
+        },
+
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
 
   const getTextBlock = () => {
-    switch (newState.stringLoaded) {
+    switch (state.stringLoaded) {
       case false: {
         return null;
       }
       case true: {
         return (
-          <TextBlock>
-            <FilledSpan>{newState.stringItem.filledString}</FilledSpan>
-            <CaretSpan isMistaken={newState.stringItem.currentLetter.isMistake}>
-              {newState.stringItem.currentLetter.value}
-            </CaretSpan>
-            <LeftedSpan id="leftedString">
-              {newState.stringItem.leftedString}
-            </LeftedSpan>
-          </TextBlock>
+          <TrainingField>
+            <TextBlock>
+              <FilledSpan>{state.stringItem.filledString}</FilledSpan>
+              <CaretSpan isMistaken={state.stringItem.currentLetter.isMistake}>
+                {state.stringItem.currentLetter.value}
+              </CaretSpan>
+              <LeftedSpan id="leftedString">
+                {state.stringItem.leftedString}
+              </LeftedSpan>
+            </TextBlock>
+            <StausList>
+              <StatusItem>
+                <StatusSpan>скорость</StatusSpan>
+                <StatusSpan>value</StatusSpan>
+              </StatusItem>
+              <StatusItem>
+                <StatusSpan>точность</StatusSpan>
+                <StatusSpan>value</StatusSpan>
+              </StatusItem>
+              <StatusItem>
+                <StatusSpan>введено символов</StatusSpan>
+                <StatusSpan>{state.amountEnteredLetter}</StatusSpan>
+              </StatusItem>
+            </StausList>
+          </TrainingField>
         );
       }
     }
   };
 
-  return <Container id="container">{getTextBlock()}</Container>;
+  return (
+    <AppContext.Provider value={{ state, dispatch }}>
+      <Container id="container">{getTextBlock()}</Container>
+      <Comp1 />
+    </AppContext.Provider>
+  );
 };

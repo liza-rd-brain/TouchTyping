@@ -1,10 +1,12 @@
-import { CurrentLetterType, StringItemType, State } from "../../types.ts";
+import {
+  CurrentLetterType,
+  StringItemType,
+  State,
+  ActionType,
+} from "../types.ts";
 
-export const changeText = (
-  state: State,
-  setState: Function,
-  enteredLetter: string
-) => {
+export const changeText = (state: State, action: ActionType) => {
+  const { payload: enteredLetter } = action;
   const { index, filledString, leftedString, currentLetter } = state.stringItem;
   const isCorrectLetter = checkLetter(currentLetter, enteredLetter);
 
@@ -23,9 +25,9 @@ export const changeText = (
           leftedString: newLeftedString,
           currentLetter: { isMistake: false, value: newCurrentLetter },
         },
+        amountEnteredLetter: state.amountEnteredLetter++,
       };
-      setState(newState);
-      break;
+      return newState;
     }
     case false: {
       const newState: State = {
@@ -37,12 +39,12 @@ export const changeText = (
             isMistake: true,
           },
         },
+        amountEnteredLetter: state.amountEnteredLetter++,
       };
-      setState(newState);
-      break;
+      return newState;
     }
     default: {
-      break;
+      return state;
     }
   }
 };
