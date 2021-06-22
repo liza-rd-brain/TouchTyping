@@ -9,6 +9,7 @@ import { initialState, reducer } from "./business/reducer";
 
 import { AppContext } from "./App.provider";
 import { Comp1 } from "./components/Test";
+import { StatusList } from "./features/StausList";
 
 const Container = styled.div`
   display: flex;
@@ -42,20 +43,6 @@ const LeftedSpan = styled.span`
   color: #808080;
 `;
 
-const StausList = styled.div`
-  display: grid;
-  width: 100px;
-  height: 300px;
-  border: 1px solid black;
-  padding: 20px;
-`;
-
-const StatusItem = styled.div`
-  border: 1px solid gray;
-  display: grid;
-`;
-
-const StatusSpan = styled.div``;
 type Carettype = {
   isMistaken?: boolean;
 };
@@ -141,20 +128,7 @@ export const App = () => {
                 {state.stringItem.leftedString}
               </LeftedSpan>
             </TextBlock>
-            <StausList>
-              <StatusItem>
-                <StatusSpan>скорость</StatusSpan>
-                <StatusSpan>value</StatusSpan>
-              </StatusItem>
-              <StatusItem>
-                <StatusSpan>точность</StatusSpan>
-                <StatusSpan>value</StatusSpan>
-              </StatusItem>
-              <StatusItem>
-                <StatusSpan>введено символов</StatusSpan>
-                <StatusSpan>{state.amountEnteredLetter}</StatusSpan>
-              </StatusItem>
-            </StausList>
+            <StatusList />
           </TrainingField>
         );
       }
