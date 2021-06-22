@@ -13,6 +13,7 @@ export const initialState: State = {
     },
   },
   amountEnteredLetter: 0,
+  time: 0,
 };
 
 export const reducer = (

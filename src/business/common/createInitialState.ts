@@ -13,6 +13,8 @@ export const createInitialState = (state: State, action: ActionType) => {
       currentLetter: { isMistake: false, value: currentLetter },
     },
     amountEnteredLetter: 0,
+    //We keep time since app started
+    time: Date.now(),
   };
   return initialState;
 };

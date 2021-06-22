@@ -14,6 +14,7 @@ export type State = {
   stringLoaded: boolean;
   stringItem: StringItemType;
   amountEnteredLetter: number;
+  time: number;
 };
 
 export type ActionType =
