@@ -11,12 +11,9 @@ export const changeText = (state: State, enteredLetter: string) => {
   /**
    * Any symbol with lenght 1
    */
-  //TODO:change to string with only one symbol!s
-  const handledKey: RegExp = /^.{1}$/gs;
+  const ishHandledKey = enteredLetter.length === 1;
 
-  const ishHandledKey = enteredLetter.match(handledKey) ? true : false;
-
-  const isCorrectLetter = checkLetter(currentLetter, enteredLetter);
+  const isCorrectLetter = currentLetter.value === enteredLetter;
 
   switch (ishHandledKey) {
     case false: {
@@ -60,12 +57,4 @@ export const changeText = (state: State, enteredLetter: string) => {
       }
     }
   }
-};
-
-const checkLetter = (
-  currentLetter: CurrentLetterType,
-  enteredLetter: string
-) => {
-  const expectedLetter = currentLetter.value;
-  return expectedLetter === enteredLetter;
 };
