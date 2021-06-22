@@ -97,8 +97,9 @@ export const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    const handler = (event: KeyboardEvent) =>
+    const handler = (event: KeyboardEvent) => {
       dispatch({ type: "keyClicked", payload: event.key });
+    };
     document.addEventListener("keydown", handler);
 
     return () => {
