@@ -22,26 +22,33 @@ export const StatusList = () => {
   const { stringItem, amountEnteredLetter, time } = state;
 
   const speed = getSpeed(stringItem, time);
-
+  const accuracy = getAccuracy(stringItem, amountEnteredLetter);
   return (
     <StatusListWrap>
       <StatusItem name={"скорость"} value={speed}></StatusItem>
-      <StatusItem name={"точность"} value={0}></StatusItem>
-      <StatusItem
-        name={"введено символов"}
-        value={state.amountEnteredLetter}
-      ></StatusItem>
+      <StatusItem name={"точность"} value={accuracy}></StatusItem>
     </StatusListWrap>
   );
 };
 
-/**
- * How many right symbol inputed in minute.
- * Right symbol = filledString
- *
- */
 const getSpeed = (stringItem: StringItemType, time: number) => {
   const { filledString } = stringItem;
   const speed = Math.round((filledString.length * 60) / time);
   return speed;
+};
+
+const getAccuracy = (
+  stringItem: StringItemType,
+  amountEnteredLetter: number
+): number => {
+  const { filledString, leftedString } = stringItem;
+
+  const textString = filledString + leftedString;
+
+  const accuracyStep = Number((100 / textString.length).toFixed(1));
+
+  const accuracy =
+    100 - (amountEnteredLetter - filledString.length) * accuracyStep;
+
+  return accuracy;
 };

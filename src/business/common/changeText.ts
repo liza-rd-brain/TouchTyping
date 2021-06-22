@@ -36,7 +36,7 @@ export const changeText = (state: State, enteredLetter: string) => {
               leftedString: newLeftedString,
               currentLetter: { isMistake: false, value: newCurrentLetter },
             },
-            amountEnteredLetter: state.amountEnteredLetter++,
+            amountEnteredLetter: state.amountEnteredLetter + 1,
           };
           return newState;
         }
@@ -50,7 +50,7 @@ export const changeText = (state: State, enteredLetter: string) => {
                 isMistake: true,
               },
             },
-            amountEnteredLetter: state.amountEnteredLetter++,
+            amountEnteredLetter: state.amountEnteredLetter + 1,
           };
           return newState;
         }

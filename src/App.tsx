@@ -84,10 +84,10 @@ export const App = () => {
     const handler = (event: KeyboardEvent) => {
       dispatch({ type: "keyClicked", payload: event.key });
     };
-    document.addEventListener("keydown", handler);
+    document.addEventListener("keyup", handler);
 
     return () => {
-      document.removeEventListener("keydown", handler);
+      document.removeEventListener("keyup", handler);
     };
   }, []);
 
