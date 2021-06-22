@@ -1,7 +1,6 @@
 import { ActionType, State } from "../types.ts";
 
-export const createInitialState = (state: State, action: ActionType) => {
-  const { payload: initialString } = action;
+export const createInitialState = (state: State, initialString: string) => {
   const leftedString = initialString.substr(1);
   const currentLetter = initialString.charAt(0);
   const initialState = {

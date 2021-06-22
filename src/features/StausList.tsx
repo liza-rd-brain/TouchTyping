@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import { useAppContext } from "../App.provider";
+import { StringItemType } from "../business/types.ts";
 import { StatusItem } from "../components/StatusItem";
 
 const StatusListWrap = styled.div`
@@ -16,10 +18,14 @@ const StatusListWrap = styled.div`
 `; */
 
 export const StatusList = () => {
-  const { state } = useAppContext();
+  const { state, dispatch } = useAppContext();
+  const { stringItem, amountEnteredLetter, time } = state;
+
+  const speed = getSpeed(stringItem, time);
+
   return (
     <StatusListWrap>
-      <StatusItem name={"скорость"} value={0}></StatusItem>
+      <StatusItem name={"скорость"} value={speed}></StatusItem>
       <StatusItem name={"точность"} value={0}></StatusItem>
       <StatusItem
         name={"введено символов"}
@@ -27,4 +33,15 @@ export const StatusList = () => {
       ></StatusItem>
     </StatusListWrap>
   );
+};
+
+/**
+ * How many right symbol inputed in minute.
+ * Right symbol = filledString
+ *
+ */
+const getSpeed = (stringItem: StringItemType, time: number) => {
+  const { filledString } = stringItem;
+  const speed = Math.round((filledString.length * 60) / time);
+  return speed;
 };

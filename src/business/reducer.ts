@@ -1,10 +1,10 @@
 import { changeText, createInitialState } from "./common";
+import { getTime } from "./common/changeTime";
 import { ActionType, State } from "./types.ts";
 
 export const initialState: State = {
   stringLoaded: false,
   stringItem: {
-    index: 0,
     filledString: "",
     leftedString: "",
     currentLetter: {
@@ -22,10 +22,16 @@ export const reducer = (
 ): State => {
   switch (action.type) {
     case "dataLoaded": {
-      return createInitialState(state, action);
+      const initialString = action.payload;
+      return createInitialState(state, initialString);
     }
     case "keyClicked": {
-      return changeText(state, action);
+      const enteredLetter = action.payload;
+      return changeText(state, enteredLetter);
+    }
+    case "timeUpdate": {
+      const initialTime = action.payload;
+      return getTime(state, initialTime);
     }
     default:
       return state;

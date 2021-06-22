@@ -1,14 +1,11 @@
 import React, { useEffect, useReducer } from "react";
 
 import styled from "styled-components";
-import { CurrentLetterType, StringItemType, State } from "./business/types.ts";
-
-import { createInitialState, changeText } from "./business/common";
 
 import { initialState, reducer } from "./business/reducer";
 
 import { AppContext } from "./App.provider";
-import { Comp1 } from "./components/Test";
+
 import { StatusList } from "./features/StausList";
 
 const Container = styled.div`
@@ -111,6 +108,16 @@ export const App = () => {
       );
   }, []);
 
+  useEffect(() => {
+    const timerInterval = setInterval(
+      () => dispatch({ type: "timeUpdate", payload: state.time }),
+      1000
+    );
+    return () => {
+      clearInterval(timerInterval);
+    };
+  }, [state.stringLoaded]);
+
   const getTextBlock = () => {
     switch (state.stringLoaded) {
       case false: {
@@ -138,7 +145,6 @@ export const App = () => {
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       <Container id="container">{getTextBlock()}</Container>
-      <Comp1 />
     </AppContext.Provider>
   );
 };
