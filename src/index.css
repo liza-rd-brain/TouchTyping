@@ -1,2 +1,12 @@
 @import-normalize;
 
+body {
+  max-width: 1920px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(85, 197, 255);
+}

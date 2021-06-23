@@ -6,16 +6,10 @@ import { StatusItem } from "../components/StatusItem";
 
 const StatusListWrap = styled.div`
   display: grid;
-  width: 100px;
-  height: 300px;
-  border: 1px solid black;
-  padding: 20px;
+  width: 124px;
+  height: 240px;
+  padding: 30px 45px 30px 0;
 `;
-
-/* const StatusItem = styled.div`
-  border: 1px solid gray;
-  display: grid;
-`; */
 
 export const StatusList = () => {
   const { state, dispatch } = useAppContext();
@@ -25,8 +19,12 @@ export const StatusList = () => {
   const accuracy = getAccuracy(stringItem, amountEnteredLetter);
   return (
     <StatusListWrap>
-      <StatusItem name={"скорость"} value={speed}></StatusItem>
-      <StatusItem name={"точность"} value={accuracy}></StatusItem>
+      <StatusItem
+        name={"скорость"}
+        value={speed}
+        measure={"зн./мин"}
+      ></StatusItem>
+      <StatusItem name={"точность"} value={accuracy} measure={"%"}></StatusItem>
     </StatusListWrap>
   );
 };

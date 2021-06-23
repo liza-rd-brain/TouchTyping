@@ -1,33 +1,31 @@
-import React, { useEffect, useReducer } from "react";
-
+import { useEffect, useReducer } from "react";
 import styled from "styled-components";
 
 import { initialState, reducer } from "./business/reducer";
 
 import { AppContext } from "./App.provider";
-
 import { StatusList } from "./features/StausList";
+import "./index.css";
 
 const Container = styled.div`
   display: flex;
   position: relative;
-  width: 100%;
-  margin: 80px 0;
 `;
 
 const TrainingField = styled.div`
   display: flex;
-  margin: 0 auto;
+  align-items: stretch;
+  margin: 150px auto 0 auto;
+  height: 420px;
+  border-radius: 14px;
+  background-color: white;
 `;
 
 const TextBlock = styled.div`
-  border: 1px solid #000;
-  width: 800px;
-  height: 300px;
-
-  padding: 20px;
+  width: 780px;
+  padding: 30px 45px;
   font-family: sans-serif;
-  font-size: 18px;
+  font-size: 24px;
   line-height: 36px;
   letter-spacing: 0.8px;
 `;
