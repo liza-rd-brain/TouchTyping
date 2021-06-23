@@ -16,7 +16,7 @@ const TrainingField = styled.div`
   display: flex;
   align-items: stretch;
   margin: 150px auto 0 auto;
-  height: 420px;
+
   border-radius: 14px;
   background-color: white;
 `;
