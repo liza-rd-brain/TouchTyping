@@ -5,7 +5,7 @@ import {
   ActionType,
 } from "../types.ts";
 
-export const changeText = (state: State, enteredLetter: string) => {
+export const handleKeyPress = (state: State, enteredLetter: string) => {
   const { filledString, leftedString, currentLetter } = state.stringItem;
 
   /**
@@ -14,7 +14,7 @@ export const changeText = (state: State, enteredLetter: string) => {
   const ishHandledKey = enteredLetter.length === 1;
 
   const isCorrectLetter = currentLetter.value === enteredLetter;
-
+  const isFirstKeyPress = state.amountEnteredLetter === 0;
   switch (ishHandledKey) {
     case false: {
       return state;
@@ -35,7 +35,17 @@ export const changeText = (state: State, enteredLetter: string) => {
             },
             amountEnteredLetter: state.amountEnteredLetter + 1,
           };
-          return newState;
+          switch (isFirstKeyPress) {
+            case true: {
+              return {
+                ...newState,
+                time: Date.now(),
+                timeStarted: true,
+              };
+            }
+            case false:
+              return newState;
+          }
         }
         case false: {
           const newState: State = {
@@ -49,7 +59,17 @@ export const changeText = (state: State, enteredLetter: string) => {
             },
             amountEnteredLetter: state.amountEnteredLetter + 1,
           };
-          return newState;
+          switch (isFirstKeyPress) {
+            case true: {
+              return {
+                ...newState,
+                time: Date.now(),
+                timeStarted: true,
+              };
+            }
+            case false:
+              return newState;
+          }
         }
         default: {
           return state;

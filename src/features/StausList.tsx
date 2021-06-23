@@ -32,7 +32,7 @@ export const StatusList = () => {
 const getSpeed = (stringItem: StringItemType, time: number) => {
   const { filledString } = stringItem;
   const speed = Math.round((filledString.length * 60) / time);
-  return speed;
+  return speed || 0;
 };
 
 const getAccuracy = (

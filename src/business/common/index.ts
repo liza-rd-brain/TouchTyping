@@ -1,2 +1,2 @@
-export { createInitialState } from "./createInitialState";
-export { changeText } from "./changeText";
+export { changeStateTextLoaded } from "./changeStateTextLoaded";
+export { handleKeyPress } from "./handleKeyPress";

@@ -96,7 +96,6 @@ export const App = () => {
       .then((res) => res.text())
       .then(
         (result) => {
-          /*           createInitialState(result, setState); */
           dispatch({ type: "dataLoaded", payload: result });
         },
 
@@ -107,14 +106,14 @@ export const App = () => {
   }, []);
 
   useEffect(() => {
-    const timerInterval = setInterval(
-      () => dispatch({ type: "timeUpdate", payload: state.time }),
-      1000
-    );
+    const timerInterval = setInterval(() => {
+      if (state.timeStarted)
+        dispatch({ type: "timeUpdate", payload: state.time });
+    }, 1000);
     return () => {
       clearInterval(timerInterval);
     };
-  }, [state.stringLoaded]);
+  }, [state.timeStarted]);
 
   const getTextBlock = () => {
     switch (state.stringLoaded) {

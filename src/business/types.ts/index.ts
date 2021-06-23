@@ -11,6 +11,7 @@ export type StringItemType = {
 
 export type State = {
   stringLoaded: boolean;
+  timeStarted: boolean;
   stringItem: StringItemType;
   amountEnteredLetter: number;
   time: number;

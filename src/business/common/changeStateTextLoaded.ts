@@ -1,19 +1,19 @@
 import { ActionType, State } from "../types.ts";
 
-export const createInitialState = (state: State, initialString: string) => {
+export const changeStateTextLoaded = (
+  state: State,
+  initialString: string
+): State => {
   const leftedString = initialString.substr(1);
   const currentLetter = initialString.charAt(0);
-  const initialState = {
+  const initialState: State = {
+    ...state,
     stringLoaded: true,
     stringItem: {
-      index: 0,
       filledString: "",
       leftedString: leftedString,
       currentLetter: { isMistake: false, value: currentLetter },
     },
-    amountEnteredLetter: 0,
-    //We keep time since app started
-    time: Date.now(),
   };
   return initialState;
 };
