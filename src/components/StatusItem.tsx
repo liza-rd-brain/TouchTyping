@@ -25,13 +25,14 @@ const StatusValue = styled(StatusBlock)`
   font-size: 30px;
   color: rgb(85, 197, 255);
 `;
+
 const StatusMeasure = styled(StatusBlock)`
   font-size: 18px;
-  color: rgb(85, 197, 255);
   flex-wrap: nowrap;
   letter-spacing: -1.5px;
   padding-left: 2px;
   line-height: 46px;
+  color: rgb(85, 197, 255);
 `;
 
 type StatusItemType = {

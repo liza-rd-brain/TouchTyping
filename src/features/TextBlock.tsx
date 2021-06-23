@@ -1,7 +1,5 @@
 import styled from "styled-components";
 import { useAppContext } from "../App.provider";
-import { StringItemType } from "../business/types.ts";
-import { StatusItem } from "../components/StatusItem";
 
 const TextBlockWrap = styled.div`
   width: 780px;
@@ -27,6 +25,8 @@ type Carettype = {
 const CaretSpan = styled.span<Carettype>`
   color: #ffffff;
   padding: 1px;
+  border-radius: 3px;
+
   background-color: ${(props) => {
     switch (props.isMistaken) {
       case true: {
@@ -40,6 +40,7 @@ const CaretSpan = styled.span<Carettype>`
       }
     }
   }};
+
   border: ${(props) => {
     switch (props.isMistaken) {
       case true: {
@@ -53,12 +54,10 @@ const CaretSpan = styled.span<Carettype>`
       }
     }
   }};
-
-  border-radius: 3px;
 `;
 
 export const TextBlock = () => {
-  const { state, dispatch } = useAppContext();
+  const { state } = useAppContext();
   return (
     <TextBlockWrap>
       <FilledSpan>{state.stringItem.filledString}</FilledSpan>

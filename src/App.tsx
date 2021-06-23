@@ -2,8 +2,8 @@ import { useEffect, useReducer } from "react";
 import styled from "styled-components";
 
 import { initialState, reducer } from "./business/reducer";
-
 import { AppContext } from "./App.provider";
+
 import { StatusList, TextBlock } from "./features";
 import "./index.css";
 
@@ -16,7 +16,6 @@ const TrainingField = styled.div`
   display: flex;
   align-items: stretch;
   margin: 150px auto 0 auto;
-
   border-radius: 14px;
   background-color: white;
 `;
@@ -28,6 +27,7 @@ export const App = () => {
     const handler = (event: KeyboardEvent) => {
       dispatch({ type: "keyClicked", payload: event.key });
     };
+
     document.addEventListener("keyup", handler);
 
     return () => {
@@ -53,12 +53,16 @@ export const App = () => {
 
   useEffect(() => {
     const timerInterval = setInterval(() => {
-      if (state.timeStarted)
+      if (state.timeStarted) {
         dispatch({ type: "timeUpdate", payload: state.time });
+      }
     }, 1000);
+
     return () => {
       clearInterval(timerInterval);
     };
+
+    //eslint-disable-next-line
   }, [state.timeStarted]);
 
   const getTextBlock = () => {
@@ -66,6 +70,7 @@ export const App = () => {
       case false: {
         return null;
       }
+
       case true: {
         return (
           <TrainingField>

@@ -11,11 +11,13 @@ const StatusListWrap = styled.div`
 `;
 
 export const StatusList = () => {
-  const { state, dispatch } = useAppContext();
-  const { stringItem, amountEnteredLetter, time } = state;
+  const {
+    state: { stringItem, amountEnteredLetter, time },
+  } = useAppContext();
 
   const speed = getSpeed(stringItem, time);
   const accuracy = getAccuracy(stringItem, amountEnteredLetter);
+
   return (
     <StatusListWrap>
       <StatusItem
@@ -41,9 +43,7 @@ const getAccuracy = (
   const { filledString, leftedString } = stringItem;
 
   const textString = filledString + leftedString;
-
   const accuracyStep = Number((100 / textString.length).toFixed(1));
-
   const accuracy =
     100 - (amountEnteredLetter - filledString.length) * accuracyStep;
 

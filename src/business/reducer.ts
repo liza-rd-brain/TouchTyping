@@ -26,14 +26,17 @@ export const reducer = (
       const initialString = action.payload;
       return changeStateTextLoaded(state, initialString);
     }
+
     case "keyClicked": {
       const enteredLetter = action.payload;
       return handleKeyPress(state, enteredLetter);
     }
+
     case "timeUpdate": {
       const initialTime = action.payload;
       return getTime(state, initialTime);
     }
+
     default:
       return state;
   }

@@ -1,4 +1,4 @@
-import { ActionType, State } from "../types.ts";
+import { State } from "../types.ts";
 
 export const changeStateTextLoaded = (
   state: State,
@@ -6,14 +6,19 @@ export const changeStateTextLoaded = (
 ): State => {
   const leftedString = initialString.substr(1);
   const currentLetter = initialString.charAt(0);
+
   const initialState: State = {
     ...state,
     stringLoaded: true,
     stringItem: {
       filledString: "",
       leftedString: leftedString,
-      currentLetter: { isMistake: false, value: currentLetter },
+      currentLetter: {
+        ...state.stringItem.currentLetter,
+        value: currentLetter,
+      },
     },
   };
+
   return initialState;
 };
