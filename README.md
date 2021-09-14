@@ -1,5 +1,5 @@
 # TouchTyping
- Internship test project wicth **React(Create-React_App)**, **TypeScript**, **Styled-Components**.
+ Internship test project with **React(Create-React_App)**, **TypeScript**, **Styled-Components**.
  
 LiveDemo:
 https://minakovalisa.github.io/TouchTyping/
