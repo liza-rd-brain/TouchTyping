@@ -1,8 +1,8 @@
 # TouchTyping
  Internship test project with **React(Create-React_App)**, **TypeScript**, **Styled-Components**.
  
-LiveDemo:
-https://liza-rd-brain.github.io/TouchTyping/
+* [LiveDemo](https://liza-rd-brain.github.io/TouchTyping/)
+* [Technical task](https://github.com/liza-rd-brain/TouchTyping/blob/main/TechnicalTask.md)
 
 ## Installing
  
