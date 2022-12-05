@@ -2,7 +2,7 @@
  Internship test project with **React(Create-React_App)**, **TypeScript**, **Styled-Components**.
  
 LiveDemo:
-https://minakovalisa.github.io/TouchTyping/
+https://liza-rd-brain.github.io/TouchTyping/
 
 ## Installing
  
